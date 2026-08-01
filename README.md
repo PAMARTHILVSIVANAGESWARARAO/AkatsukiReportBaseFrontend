@@ -11,9 +11,9 @@ Welcome to the **Akatsuki Report Portal**, a highly immersive, interactive, and 
 
 ## 📸 Demo Video
 
-Click the image below to watch the video demonstration of the Akatsuki Report portal in action:
+Click the pain image below to watch the video demonstration of the Akatsuki Report portal in action:
 
-[![Akatsuki Report Demo](https://img.youtube.com/vi/nn4lyYixHaQ/maxresdefault.jpg)](https://www.youtube.com/watch?v=nn4lyYixHaQ)
+[![Akatsuki Report Demo](src/assets/images/akatsuki_members_sd/pain.png)](https://www.youtube.com/watch?v=nn4lyYixHaQ)
 
 ---
 
