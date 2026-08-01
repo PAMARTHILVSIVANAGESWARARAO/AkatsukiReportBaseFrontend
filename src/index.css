@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+/* ─── NewRocker Font ─────────────────────────────────── */
+@font-face {
+  font-family: "New Rocker";
+  src: url("./assets/fonts/NewRocker-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ─── Global Reset & Base ────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --akatsuki-red:     #c0392b;
+  --akatsuki-crimson: #8b0000;
+  --akatsuki-dark:    #0a0a0a;
+  --akatsuki-bg:      #111111;
+  --akatsuki-surface: #1a1a1a;
+  --akatsuki-border:  #2a2a2a;
+  --akatsuki-gold:    #d4a017;
+  --akatsuki-text:    #e8e8e8;
+  --akatsuki-muted:   #888888;
+  --font-rocker:      "New Rocker", cursive;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-rocker);
+  background-color: var(--akatsuki-dark);
+  color: var(--akatsuki-text);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Custom Scrollbar ───────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--akatsuki-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--akatsuki-crimson);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--akatsuki-red);
+}
+
+/* ─── Utility Classes ────────────────────────────────── */
+.font-rocker {
+  font-family: var(--font-rocker);
+}
+
+.akatsuki-gradient {
+  background: linear-gradient(135deg, var(--akatsuki-crimson), var(--akatsuki-red), #ff4444);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glow-red {
+  text-shadow: 0 0 20px rgba(192, 57, 43, 0.8), 0 0 40px rgba(139, 0, 0, 0.5);
+}
+
+.glass-card {
+  background: rgba(26, 26, 26, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(192, 57, 43, 0.25);
+  border-radius: 12px;
+}
+
+/* ─── Animations ─────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse-red {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(192, 57, 43, 0.4); }
+  50%       { box-shadow: 0 0 0 12px rgba(192, 57, 43, 0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes scanline {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes borderGlow {
+  0%, 100% { border-color: rgba(192, 57, 43, 0.3); }
+  50%       { border-color: rgba(192, 57, 43, 0.8); }
+}
+
+.anim-fade-up   { animation: fadeInUp   0.7s ease both; }
+.anim-fade-left { animation: fadeInLeft 0.7s ease both; }
+.anim-pulse     { animation: pulse-red  2s infinite; }
+.anim-float     { animation: float      3s ease-in-out infinite; }
+.anim-border    { animation: borderGlow 2s ease-in-out infinite; }
