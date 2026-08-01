@@ -5,6 +5,7 @@ import Hero from './hero/Hero'
 import Login from './auth/Login'
 import Signup from './auth/Signup'
 import Dashboard from './dashboard/Dashboard'
+import MemberDetail from './dashboard/MemberDetail'
 import { Toaster } from 'react-hot-toast'
 
 const App = () => {
@@ -81,6 +82,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/member/:memberName" element={<MemberDetail />} />
         </Routes>
       </BrowserRouter>
     </div>

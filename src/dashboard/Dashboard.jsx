@@ -124,15 +124,24 @@ const Dashboard = () => {
       const finalUrl = formattedBaseUrl.endsWith('/') ? formattedBaseUrl : `${formattedBaseUrl}/`;
 
       try {
-        const response = await fetch(`${finalUrl}api/dashboard`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
+        const [dashRes, countRes] = await Promise.all([
+          fetch(`${finalUrl}api/dashboard`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          }),
+          fetch(`${finalUrl}api/dashboard/user-count`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          })
+        ]);
 
-        if (response.status === 401) {
+        if (dashRes.status === 401 || countRes.status === 401) {
           toast.error('Session expired. Please sign in again.');
           localStorage.removeItem('token');
           localStorage.removeItem('username');
@@ -140,12 +149,19 @@ const Dashboard = () => {
           return;
         }
 
-        if (!response.ok) {
+        if (!dashRes.ok) {
           throw new Error('Failed to fetch dashboard info');
         }
 
-        const result = await response.json();
-        setData(result);
+        const result = await dashRes.json();
+        
+        let userCount = 0;
+        if (countRes.ok) {
+          const countData = await countRes.json();
+          userCount = countData.user_count;
+        }
+        
+        setData({ ...result, userCount });
       } catch (err) {
         console.error('Fetch error:', err);
         toast.error('Failed to load intelligence data.');
@@ -167,8 +183,6 @@ const Dashboard = () => {
   const bodyMarginLeft = isMobile ? 25 : 40;
   const nameFontSize = isMobile ? '1.6rem' : '2.5rem';
   const imgHeight = isMobile ? 80 : 110;
-  const shadowWidth = isMobile ? 55 : 75;
-  const shadowHeight = isMobile ? 10 : 14;
 
   return (
     <div
@@ -294,20 +308,46 @@ const Dashboard = () => {
           <div>
             {/* Welcome Banner */}
             <div style={{ marginBottom: '3rem', animation: 'fadeInUp 0.8s ease' }}>
-              <h1
-                style={{
-                  fontFamily: 'var(--font-rocker)',
-                  fontSize: '2.5rem',
-                  color: '#fff',
-                  marginBottom: '0.5rem',
-                  textShadow: '0 0 15px rgba(192, 57, 43, 0.5)',
-                }}
-              >
-                {data?.message || `Welcome to the HQ, ${data?.username}!`}
-              </h1>
-              <p style={{ color: '#888', fontSize: '1rem', letterSpacing: '0.05em' }}>
-                Secure access granted. Showing active operative statuses.
-              </p>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+                <div>
+                  <h1
+                    style={{
+                      fontFamily: 'var(--font-rocker)',
+                      fontSize: '2.5rem',
+                      color: '#fff',
+                      marginBottom: '0.5rem',
+                      textShadow: '0 0 15px rgba(192, 57, 43, 0.5)',
+                    }}
+                  >
+                    {data?.message || `Welcome to the HQ, ${data?.username}!`}
+                  </h1>
+                  <p style={{ color: '#888', fontSize: '1rem', letterSpacing: '0.05em', margin: 0 }}>
+                    Secure access granted. Showing active operative statuses.
+                  </p>
+                </div>
+                
+                {data?.userCount !== undefined && (
+                  <div
+                    style={{
+                      background: 'rgba(192, 57, 43, 0.15)',
+                      border: '1px solid rgba(192, 57, 43, 0.4)',
+                      borderRadius: '8px',
+                      padding: '0.75rem 1.25rem',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'flex-end',
+                      boxShadow: '0 4px 15px rgba(192, 57, 43, 0.15)',
+                    }}
+                  >
+                    <span style={{ fontSize: '0.72rem', color: '#ff6b6b', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: '600' }}>
+                      Active Intel Officers
+                    </span>
+                    <span style={{ fontSize: '1.75rem', fontFamily: 'var(--font-rocker)', color: '#fff', marginTop: '0.25rem' }}>
+                      {data.userCount}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* List of matched operatives (exactly like the mockup image) */}
@@ -332,6 +372,7 @@ const Dashboard = () => {
                 return (
                   <div
                     key={i}
+                    onClick={() => navigate(`/member/${searchKey}`)}
                     style={{
                       position: 'relative',
                       display: 'flex',
@@ -339,6 +380,7 @@ const Dashboard = () => {
                       width: '100%',
                       minHeight: `${circleSize + 10}px`,
                       boxSizing: 'border-box',
+                      cursor: 'pointer',
                     }}
                   >
                     {/* Bright Red Circle with character overlapping */}
