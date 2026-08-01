@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../data/logo';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Logging in with:', email, password);
+    if (username !== 'pain_username') {
+      setError("Username must be 'pain_username'");
+      return;
+    }
+    setError('');
+    console.log('Logging in with:', username, password);
     // Add auth logic or redirect to home for now
     navigate('/');
   };
@@ -136,10 +142,10 @@ const Login = () => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          {/* Email input */}
+          {/* Username input */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <label
-              htmlFor="email"
+              htmlFor="username"
               style={{
                 fontSize: '0.75rem',
                 letterSpacing: '0.1em',
@@ -148,15 +154,15 @@ const Login = () => {
                 fontFamily: 'system-ui, sans-serif',
               }}
             >
-              Email Address
+              Username
             </label>
             <input
-              id="email"
-              type="email"
+              id="username"
+              type="text"
               required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="itachi@akatsuki.org"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="e.g. pain_username"
               style={{
                 width: '100%',
                 background: '#141414',
@@ -178,6 +184,18 @@ const Login = () => {
                 e.target.style.boxShadow = 'none';
               }}
             />
+            {error && (
+              <span
+                style={{
+                  color: '#ff4444',
+                  fontSize: '0.8rem',
+                  marginTop: '0.25rem',
+                  fontFamily: 'system-ui, sans-serif',
+                }}
+              >
+                {error}
+              </span>
+            )}
           </div>
 
           {/* Password input */}

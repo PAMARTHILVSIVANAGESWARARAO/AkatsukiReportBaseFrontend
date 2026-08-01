@@ -1,21 +1,39 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../data/logo';
 
 const Signup = () => {
-  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [usernameError, setUsernameError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    let hasError = false;
+
+    if (username !== 'pain_username') {
+      setUsernameError("Username must be 'pain_username'");
+      hasError = true;
+    } else {
+      setUsernameError('');
+    }
+
     if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+      setPasswordError("Passwords do not match!");
+      hasError = true;
+    } else {
+      setPasswordError('');
+    }
+
+    if (hasError) {
       return;
     }
-    console.log('Signing up with:', name, email, password);
+
+    console.log('Signing up with:', username, email, password);
     // Redirect to home
     navigate('/');
   };
@@ -142,10 +160,10 @@ const Signup = () => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
-          {/* Agent Name input */}
+          {/* Username input */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
             <label
-              htmlFor="name"
+              htmlFor="username"
               style={{
                 fontSize: '0.75rem',
                 letterSpacing: '0.1em',
@@ -154,15 +172,15 @@ const Signup = () => {
                 fontFamily: 'system-ui, sans-serif',
               }}
             >
-              Agent Name
+              Username
             </label>
             <input
-              id="name"
+              id="username"
               type="text"
               required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Kisame Hoshigaki"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="e.g. pain_username"
               style={{
                 width: '100%',
                 background: '#141414',
@@ -184,6 +202,18 @@ const Signup = () => {
                 e.target.style.boxShadow = 'none';
               }}
             />
+            {usernameError && (
+              <span
+                style={{
+                  color: '#ff4444',
+                  fontSize: '0.8rem',
+                  marginTop: '0.25rem',
+                  fontFamily: 'system-ui, sans-serif',
+                }}
+              >
+                {usernameError}
+              </span>
+            )}
           </div>
 
           {/* Email input */}
@@ -316,6 +346,18 @@ const Signup = () => {
                 e.target.style.boxShadow = 'none';
               }}
             />
+            {passwordError && (
+              <span
+                style={{
+                  color: '#ff4444',
+                  fontSize: '0.8rem',
+                  marginTop: '0.25rem',
+                  fontFamily: 'system-ui, sans-serif',
+                }}
+              >
+                {passwordError}
+              </span>
+            )}
           </div>
 
           {/* Submit button */}
