@@ -4,6 +4,8 @@ import bgm from './data/bgm'
 import Hero from './hero/Hero'
 import Login from './auth/Login'
 import Signup from './auth/Signup'
+import Dashboard from './dashboard/Dashboard'
+import { Toaster } from 'react-hot-toast'
 
 const App = () => {
   const audioRef   = useRef(null)
@@ -53,6 +55,18 @@ const App = () => {
       {/* hidden looping BGM */}
       <audio ref={audioRef} src={bgm} loop preload="auto" />
 
+      <Toaster 
+        position="top-center"
+        toastOptions={{
+          style: {
+            background: '#141414',
+            color: '#fff',
+            border: '1px solid rgba(192, 57, 43, 0.4)',
+            fontFamily: 'system-ui, sans-serif',
+          },
+        }}
+      />
+
       <BrowserRouter>
         <Routes>
           <Route path="/" element={
@@ -66,6 +80,7 @@ const App = () => {
           } />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </BrowserRouter>
     </div>

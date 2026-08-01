@@ -1,23 +1,46 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../data/logo';
+import toast from 'react-hot-toast';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (username !== 'pain_username') {
-      setError("Username must be 'pain_username'");
-      return;
+    setLoading(true);
+    
+    const baseUrl = import.meta.env.BACKEND_URL || 'localhost:8000/';
+    const formattedBaseUrl = baseUrl.startsWith('http') ? baseUrl : `http://${baseUrl}`;
+    const finalUrl = formattedBaseUrl.endsWith('/') ? formattedBaseUrl : `${formattedBaseUrl}/`;
+    
+    try {
+      const response = await fetch(`${finalUrl}api/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('username', data.username);
+        toast.success(data.message || 'Login successful!');
+        navigate('/dashboard');
+      } else {
+        toast.error(data.message || 'Invalid credentials or user not found!');
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      toast.error('Could not connect to the authentication server.');
+    } finally {
+      setLoading(false);
     }
-    setError('');
-    console.log('Logging in with:', username, password);
-    // Add auth logic or redirect to home for now
-    navigate('/');
   };
 
   return (
@@ -142,10 +165,10 @@ const Login = () => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          {/* Username input */}
+          {/* Email input */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <label
-              htmlFor="username"
+              htmlFor="email"
               style={{
                 fontSize: '0.75rem',
                 letterSpacing: '0.1em',
@@ -154,15 +177,15 @@ const Login = () => {
                 fontFamily: 'system-ui, sans-serif',
               }}
             >
-              Username
+              Email Address
             </label>
             <input
-              id="username"
-              type="text"
+              id="email"
+              type="email"
               required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="e.g. pain_username"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="agent@akatsuki.org"
               style={{
                 width: '100%',
                 background: '#141414',
@@ -184,18 +207,6 @@ const Login = () => {
                 e.target.style.boxShadow = 'none';
               }}
             />
-            {error && (
-              <span
-                style={{
-                  color: '#ff4444',
-                  fontSize: '0.8rem',
-                  marginTop: '0.25rem',
-                  fontFamily: 'system-ui, sans-serif',
-                }}
-              >
-                {error}
-              </span>
-            )}
           </div>
 
           {/* Password input */}
@@ -245,10 +256,11 @@ const Login = () => {
           {/* Submit button */}
           <button
             type="submit"
+            disabled={loading}
             style={{
               marginTop: '0.75rem',
               width: '100%',
-              background: 'linear-gradient(135deg, #8b0000, #c0392b)',
+              background: loading ? 'rgba(139, 0, 0, 0.5)' : 'linear-gradient(135deg, #8b0000, #c0392b)',
               color: '#fff',
               border: 'none',
               borderRadius: '8px',
@@ -256,22 +268,26 @@ const Login = () => {
               fontFamily: 'var(--font-rocker)',
               fontSize: '1rem',
               letterSpacing: '0.05em',
-              cursor: 'pointer',
+              cursor: loading ? 'not-allowed' : 'pointer',
               transition: 'all 0.3s',
               boxShadow: '0 4px 12px rgba(192, 57, 43, 0.3)',
             }}
             onMouseEnter={(e) => {
-              e.target.style.background = 'linear-gradient(135deg, #c0392b, #ff4444)';
-              e.target.style.transform = 'translateY(-1px)';
-              e.target.style.boxShadow = '0 6px 16px rgba(192, 57, 43, 0.5)';
+              if (!loading) {
+                e.target.style.background = 'linear-gradient(135deg, #c0392b, #ff4444)';
+                e.target.style.transform = 'translateY(-1px)';
+                e.target.style.boxShadow = '0 6px 16px rgba(192, 57, 43, 0.5)';
+              }
             }}
             onMouseLeave={(e) => {
-              e.target.style.background = 'linear-gradient(135deg, #8b0000, #c0392b)';
-              e.target.style.transform = 'none';
-              e.target.style.boxShadow = '0 4px 12px rgba(192, 57, 43, 0.3)';
+              if (!loading) {
+                e.target.style.background = 'linear-gradient(135deg, #8b0000, #c0392b)';
+                e.target.style.transform = 'none';
+                e.target.style.boxShadow = '0 4px 12px rgba(192, 57, 43, 0.3)';
+              }
             }}
           >
-            ENTER THE NET
+            {loading ? 'TRANSMITTING...' : 'ENTER THE NET'}
           </button>
         </form>
 

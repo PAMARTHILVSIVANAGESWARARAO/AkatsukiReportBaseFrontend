@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import sections from '../data/sections'
-import bgm from '../data/bgm'
 import logo from '../data/logo'
 
 import heroVideo from '../assets/videos/heroVideoWithAudio.mp4'
@@ -217,7 +216,7 @@ function SectionCard({ section, index, visible }) {
 }
 
 /* ─────────── Main Hero ─────────── */
-export default function Hero({ changeBgm, playBgm, pauseBgm, introPlayed, setIntroPlayed }) {
+export default function Hero({ playBgm, pauseBgm, introPlayed, setIntroPlayed }) {
   const containerRef = useRef(null)
   const sectionsRef = useRef(null)
   const introVideoRef = useRef(null)
@@ -815,7 +814,7 @@ export default function Hero({ changeBgm, playBgm, pauseBgm, introPlayed, setInt
                       <SectionCard
                         section={section}
                         index={i}
-                        visible={true}
+                        visible={cardsVisible}
                       />
                     </div>
                   ))}

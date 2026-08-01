@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../data/logo';
+import toast from 'react-hot-toast';
 
 const Signup = () => {
   const [username, setUsername] = useState('');
@@ -9,21 +10,16 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [usernameError, setUsernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let hasError = false;
 
-    if (username !== 'pain_username') {
-      setUsernameError("Username must be 'pain_username'");
-      hasError = true;
-    } else {
-      setUsernameError('');
-    }
-
     if (password !== confirmPassword) {
       setPasswordError("Passwords do not match!");
+      toast.error("Passwords do not match!");
       hasError = true;
     } else {
       setPasswordError('');
@@ -33,9 +29,41 @@ const Signup = () => {
       return;
     }
 
-    console.log('Signing up with:', username, email, password);
-    // Redirect to home
-    navigate('/');
+    setLoading(true);
+    
+    const baseUrl = import.meta.env.BACKEND_URL || 'localhost:8000/';
+    const formattedBaseUrl = baseUrl.startsWith('http') ? baseUrl : `http://${baseUrl}`;
+    const finalUrl = formattedBaseUrl.endsWith('/') ? formattedBaseUrl : `${formattedBaseUrl}/`;
+    
+    try {
+      const response = await fetch(`${finalUrl}api/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, username, password }),
+      });
+      
+      const data = await response.json();
+      if (response.ok || response.status === 201) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('username', data.username);
+        toast.success(data.message || 'Registration successful!');
+        navigate('/dashboard');
+      } else {
+        toast.error(data.message || 'Registration failed!');
+        if (data.message && data.message.includes('Username')) {
+          setUsernameError(data.message);
+        } else if (data.message && data.message.includes('Email')) {
+          toast.error(data.message);
+        }
+      }
+    } catch (err) {
+      console.error('Registration error:', err);
+      toast.error('Could not connect to the registration server.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -363,10 +391,11 @@ const Signup = () => {
           {/* Submit button */}
           <button
             type="submit"
+            disabled={loading}
             style={{
               marginTop: '0.75rem',
               width: '100%',
-              background: 'linear-gradient(135deg, #8b0000, #c0392b)',
+              background: loading ? 'rgba(139, 0, 0, 0.5)' : 'linear-gradient(135deg, #8b0000, #c0392b)',
               color: '#fff',
               border: 'none',
               borderRadius: '8px',
@@ -374,22 +403,26 @@ const Signup = () => {
               fontFamily: 'var(--font-rocker)',
               fontSize: '1rem',
               letterSpacing: '0.05em',
-              cursor: 'pointer',
+              cursor: loading ? 'not-allowed' : 'pointer',
               transition: 'all 0.3s',
               boxShadow: '0 4px 12px rgba(192, 57, 43, 0.3)',
             }}
             onMouseEnter={(e) => {
-              e.target.style.background = 'linear-gradient(135deg, #c0392b, #ff4444)';
-              e.target.style.transform = 'translateY(-1px)';
-              e.target.style.boxShadow = '0 6px 16px rgba(192, 57, 43, 0.5)';
+              if (!loading) {
+                e.target.style.background = 'linear-gradient(135deg, #c0392b, #ff4444)';
+                e.target.style.transform = 'translateY(-1px)';
+                e.target.style.boxShadow = '0 6px 16px rgba(192, 57, 43, 0.5)';
+              }
             }}
             onMouseLeave={(e) => {
-              e.target.style.background = 'linear-gradient(135deg, #8b0000, #c0392b)';
-              e.target.style.transform = 'none';
-              e.target.style.boxShadow = '0 4px 12px rgba(192, 57, 43, 0.3)';
+              if (!loading) {
+                e.target.style.background = 'linear-gradient(135deg, #8b0000, #c0392b)';
+                e.target.style.transform = 'none';
+                e.target.style.boxShadow = '0 4px 12px rgba(192, 57, 43, 0.3)';
+              }
             }}
           >
-            INITIATE SIGNUP
+            {loading ? 'TRANSMITTING...' : 'INITIATE SIGNUP'}
           </button>
         </form>
 

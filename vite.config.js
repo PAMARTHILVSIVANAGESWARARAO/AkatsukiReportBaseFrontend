@@ -12,4 +12,5 @@ export default defineConfig({
     port: 5173,
     allowedHosts: true, // Allow all hosts
   },
+  envPrefix: ['VITE_', 'BACKEND_'],
 })
