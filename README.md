@@ -11,53 +11,7 @@ Welcome to the **Akatsuki Report Portal**, a highly immersive, interactive, and 
 
 ## 📸 Interface Gallery (Screenshots)
 
-*Below are the designated slots for the application's user interface. Please place your exported screenshot images under a new folder `src/assets/screenshots/` and update/insert the paths accordingly.*
 
-<table width="100%">
-  <tr>
-    <td width="50%" align="center">
-      <b>1. The Immersive Splash Entrance</b><br/>
-      <img src="src/assets/images/others/logo.png" width="100%" alt="Splash Screen Placeholder" style="border: 1px solid #c0392b; border-radius: 8px; max-height: 250px; object-fit: contain; background: #0a0a0a;" /><br/>
-      <i>Place screenshot at: <code>src/assets/screenshots/splash.png</code></i>
-    </td>
-    <td width="50%" align="center">
-      <b>2. Cinematic Video Intro</b><br/>
-      <img src="src/assets/images/others/logo.png" width="100%" alt="Video Intro Placeholder" style="border: 1px solid #c0392b; border-radius: 8px; max-height: 250px; object-fit: contain; background: #0a0a0a;" /><br/>
-      <i>Place screenshot at: <code>src/assets/screenshots/video_intro.png</code></i>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" align="center">
-      <b>3. Landing Page Mission Scroll</b><br/>
-      <img src="src/assets/images/others/logo.png" width="100%" alt="Landing Page Placeholder" style="border: 1px solid #c0392b; border-radius: 8px; max-height: 250px; object-fit: contain; background: #0a0a0a;" /><br/>
-      <i>Place screenshot at: <code>src/assets/screenshots/landing.png</code></i>
-    </td>
-    <td width="50%" align="center">
-      <b>4. Glassmorphic Agent Authentication</b><br/>
-      <img src="src/assets/images/others/logo.png" width="100%" alt="Auth Page Placeholder" style="border: 1px solid #c0392b; border-radius: 8px; max-height: 250px; object-fit: contain; background: #0a0a0a;" /><br/>
-      <i>Place screenshot at: <code>src/assets/screenshots/auth.png</code></i>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" align="center">
-      <b>5. HQ Operative Overview</b><br/>
-      <img src="src/assets/images/others/logo.png" width="100%" alt="HQ Dashboard Placeholder" style="border: 1px solid #c0392b; border-radius: 8px; max-height: 250px; object-fit: contain; background: #0a0a0a;" /><br/>
-      <i>Place screenshot at: <code>src/assets/screenshots/hq_dashboard.png</code></i>
-    </td>
-    <td width="50%" align="center">
-      <b>6. Operative Intelligence Dossier (News & Ratings)</b><br/>
-      <img src="src/assets/images/others/logo.png" width="100%" alt="Dossier Placeholder" style="border: 1px solid #c0392b; border-radius: 8px; max-height: 250px; object-fit: contain; background: #0a0a0a;" /><br/>
-      <i>Place screenshot at: <code>src/assets/screenshots/member_detail.png</code></i>
-    </td>
-  </tr>
-  <tr>
-    <td width="100%" align="center" colspan="2">
-      <b>7. Custom 404 Page Not Found (Pain Edition)</b><br/>
-      <img src="src/assets/images/others/logo.png" width="50%" alt="404 Page Placeholder" style="border: 1px solid #c0392b; border-radius: 8px; max-height: 250px; object-fit: contain; background: #0a0a0a;" /><br/>
-      <i>Place screenshot at: <code>src/assets/screenshots/404_not_found.png</code></i>
-    </td>
-  </tr>
-</table>
 
 ---
 
